@@ -1,6 +1,7 @@
 """
 Simple Todo Manager
 """
+import priority
 
 
 class Task:
@@ -8,21 +9,22 @@ class Task:
         self.title = title
         self.description = description
         self.completed = False
+        self.priority = priority  # high, normal, low
 
     def complete(self):
         self.completed = True
 
     def __str__(self):
         status = "✓" if self.completed else "✗"
-        return f"[{status}] {self.title}"
+        return f"[{status}] {self.title} ({self.priority})"
 
 
 class TodoList:
     def __init__(self):
         self.tasks = []
 
-    def add_task(self, title, description=""):
-        task = Task(title, description)
+    def add_task(self, title, description="", priority="normal"):
+        task = Task(title, description, priority)
         self.tasks.append(task)
         return task
 
