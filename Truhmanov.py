@@ -67,6 +67,9 @@ class TodoList:
                 overdue.append(task)
         return overdue
 
+    def get_tasks_by_tag(self, tag):
+        return [t for t in self.tasks if tag in t.tags]
+
 def main():
     todo = TodoList()
     todo.add_task("Изучить Git", "Разобраться с ветками и cherry-pick")
@@ -79,6 +82,17 @@ def main():
 
     print("\nПросроченные задачи: ")
     for task in todo.get_overdue_tasks("2026-04-10"):
+        print(f"  {task}")
+
+    task1 = todo.add_task("Почитать документацию", "Прочитать про cherry-pick")
+    task1.add_tag("учёба")
+    task1.add_tag("git")
+
+    task2 = todo.add_task("Сходить в зал", "Тренировка")
+    task2.add_tag("спорт")
+
+    print("\nЗадачи с тегом 'учёба':")
+    for task in todo.get_tasks_by_tag("учёба"):
         print(f"  {task}")
 
     task = todo.tasks[3]  # задача с дедлайном
