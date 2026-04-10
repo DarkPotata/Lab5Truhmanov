@@ -16,6 +16,15 @@ class Task:
         deadline_str = f" (до {self.deadline})" if self.deadline else ""
         return f"[{status}] {self.title}{deadline_str}"
 
+    def days_until_deadline(self, current_date):
+        if not self.deadline:
+            return None
+        # упрощённый расчёт в днях
+        from datetime import datetime
+        deadline_date = datetime.strptime(self.deadline, "%Y-%m-%d")
+        current = datetime.strptime(current_date, "%Y-%m-%d")
+        return (deadline_date - current).days
+
 
 class TodoList:
     def __init__(self):
@@ -63,7 +72,13 @@ def main():
     print("\nПросроченные задачи:")
     for task in todo.get_overdue_tasks("2026-04-10"):
         print(f"  {task}")
-        
+
+    task = todo.tasks[3]  # задача с дедлайном
+    days = task.days_until_deadline("2026-04-10")
+    if days is not None:
+        status_word = "дней" if days >= 0 else "просрочено на"
+        print(f"\nЗадача '{task.title}': {abs(days)} {status_word}")
+
     print("\nЗадачи по приоритету:")
     for task in todo.get_tasks_sorted_by_priority():
         print(f"  {task}")
