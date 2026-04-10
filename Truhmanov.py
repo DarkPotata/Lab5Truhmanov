@@ -5,26 +5,24 @@ import priority
 
 
 class Task:
-    def __init__(self, title, description=""):
+    def __init__(self, title, description="", deadline=None):
         self.title = title
         self.description = description
         self.completed = False
-        self.priority = priority  # high, normal, low
-
-    def complete(self):
-        self.completed = True
+        self.deadline = deadline  # строка с датой
 
     def __str__(self):
         status = "✓" if self.completed else "✗"
-        return f"[{status}] {self.title} ({self.priority})"
+        deadline_str = f" (до {self.deadline})" if self.deadline else ""
+        return f"[{status}] {self.title}{deadline_str}"
 
 
 class TodoList:
     def __init__(self):
         self.tasks = []
 
-    def add_task(self, title, description="", priority="normal"):
-        task = Task(title, description, priority)
+    def add_task(self, title, description="", deadline=None):
+        task = Task(title, description, deadline)
         self.tasks.append(task)
         return task
 
