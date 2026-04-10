@@ -42,6 +42,14 @@ class TodoList:
     def get_tasks_by_priority(self, priority):
         return [t for t in self.tasks if t.priority == priority]
 
+    def get_overdue_tasks(self, current_date):
+        # упрощённо: если дата в формате "2026-04-10"
+        overdue = []
+        for task in self.tasks:
+            if not task.completed and task.deadline and task.deadline < current_date:
+                overdue.append(task)
+        return overdue
+
 def main():
     todo = TodoList()
     todo.add_task("Изучить Git", "Разобраться с ветками и cherry-pick")
@@ -49,7 +57,13 @@ def main():
     todo.add_task("Отдохнуть", "Посмотреть сериал")
     todo.add_task("Срочная задача", "Сделать прямо сейчас", "high")
     todo.add_task("Неважная задача", "Можно отложить", "low")
+    todo.add_task("Сдать отчёт", "Подготовить документы", "2026-04-05")
+    todo.add_task("Купить продукты", "Молоко, хлеб", "2026-04-12")
 
+    print("\nПросроченные задачи:")
+    for task in todo.get_overdue_tasks("2026-04-10"):
+        print(f"  {task}")
+        
     print("\nЗадачи по приоритету:")
     for task in todo.get_tasks_sorted_by_priority():
         print(f"  {task}")
