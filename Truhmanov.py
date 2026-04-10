@@ -1,11 +1,9 @@
 """
-Simple Todo Manager
+Simple Todo Manager with priorities
 """
-import priority
-
 
 class Task:
-    def __init__(self, title, description=""):
+    def __init__(self, title, description="", priority="normal"):
         self.title = title
         self.description = description
         self.completed = False
@@ -44,6 +42,7 @@ class TodoList:
     def get_tasks_by_priority(self, priority):
         return [t for t in self.tasks if t.priority == priority]
 
+
 def main():
     todo = TodoList()
     todo.add_task("Изучить Git", "Разобраться с ветками и cherry-pick")
@@ -52,6 +51,10 @@ def main():
     todo.add_task("Срочная задача", "Сделать прямо сейчас", "high")
     todo.add_task("Неважная задача", "Можно отложить", "low")
 
+    print("Все задачи:")
+    for task in todo.get_all_tasks():
+        print(f"  {task}")
+
     print("\nЗадачи по приоритету:")
     for task in todo.get_tasks_sorted_by_priority():
         print(f"  {task}")
@@ -59,11 +62,6 @@ def main():
     print("\nСрочные задачи:")
     for task in todo.get_tasks_by_priority("high"):
         print(f"  {task}")
-
-    print("Все задачи:")
-    for task in todo.get_all_tasks():
-        print(f"  {task}")
-
 
 if __name__ == "__main__":
     main()
