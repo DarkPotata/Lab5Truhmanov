@@ -43,6 +43,13 @@ class TodoList:
         self.tasks.append(task)
         return task
 
+    def get_tag_statistics(self):
+        stats = {}
+        for task in self.tasks:
+            for tag in task.tags:
+                stats[tag] = stats.get(tag, 0) + 1
+        return stats
+
     def get_all_tasks(self):
         return self.tasks
 
@@ -79,6 +86,11 @@ def main():
     todo.add_task("Неважная задача", "Можно отложить", "low")
     todo.add_task("Сдать отчёт", "Подготовить документы", "2026-04-05")
     todo.add_task("Купить продукты", "Молоко, хлеб", "2026-04-12")
+
+    print("\nСтатистика по тегам:")
+    stats = todo.get_tag_statistics()
+    for tag, count in stats.items():
+        print(f"  {tag}: {count} задач(а)")
 
     print("\nПросроченные задачи: ")
     for task in todo.get_overdue_tasks("2026-04-10"):
