@@ -1,7 +1,8 @@
 """
-Simple Todo Manager
+Simple Todo Manager with deadlines
 """
-import priority
+
+from datetime import datetime
 
 
 class Task:
@@ -9,21 +10,22 @@ class Task:
         self.title = title
         self.description = description
         self.completed = False
-        self.deadline = deadline  # строка с датой
+        self.deadline = deadline  # строка в формате "YYYY-MM-DD"
+
+    def complete(self):
+        self.completed = True
+
+    def days_until_deadline(self, current_date):
+        if not self.deadline:
+            return None
+        deadline_date = datetime.strptime(self.deadline, "%Y-%m-%d")
+        current = datetime.strptime(current_date, "%Y-%m-%d")
+        return (deadline_date - current).days
 
     def __str__(self):
         status = "✓" if self.completed else "✗"
         deadline_str = f" (до {self.deadline})" if self.deadline else ""
         return f"[{status}] {self.title}{deadline_str}"
-
-    def days_until_deadline(self, current_date):
-        if not self.deadline:
-            return None
-        # упрощённый расчёт в днях
-        from datetime import datetime
-        deadline_date = datetime.strptime(self.deadline, "%Y-%m-%d")
-        current = datetime.strptime(current_date, "%Y-%m-%d")
-        return (deadline_date - current).days
 
 
 class TodoList:
@@ -44,53 +46,37 @@ class TodoList:
     def get_completed_tasks(self):
         return [t for t in self.tasks if t.completed]
 
-    def get_tasks_sorted_by_priority(self):
-        priority_order = {"high": 1, "normal": 2, "low": 3}
-        return sorted(self.tasks, key=lambda t: priority_order.get(t.priority, 2))
-
-    def get_tasks_by_priority(self, priority):
-        return [t for t in self.tasks if t.priority == priority]
-
     def get_overdue_tasks(self, current_date):
-        # упрощённо: если дата в формате "2026-04-10"
         overdue = []
         for task in self.tasks:
             if not task.completed and task.deadline and task.deadline < current_date:
                 overdue.append(task)
         return overdue
 
+
 def main():
     todo = TodoList()
     todo.add_task("Изучить Git", "Разобраться с ветками и cherry-pick")
     todo.add_task("Сделать лабораторную", "Подготовить репозиторий")
     todo.add_task("Отдохнуть", "Посмотреть сериал")
-    todo.add_task("Срочная задача", "Сделать прямо сейчас", "high")
-    todo.add_task("Неважная задача", "Можно отложить", "low")
     todo.add_task("Сдать отчёт", "Подготовить документы", "2026-04-05")
     todo.add_task("Купить продукты", "Молоко, хлеб", "2026-04-12")
 
-    print("\nПросроченные задачи: ")
-    for task in todo.get_overdue_tasks("2026-04-10"):
-        print(f"  {task}")
-
-    task = todo.tasks[3]  # задача с дедлайном
-    days = task.days_until_deadline("2026-04-10")
-    if days is not None:
-        status_word = "дней" if days >= 0 else "просрочено на"
-        print(f"\nЗадача '{task.title}': {abs(days)} {status_word}")
-
-    print("\nЗадачи по приоритету:")
-    for task in todo.get_tasks_sorted_by_priority():
-        print(f"  {task}")
-
-    print("\nСрочные задачи:")
-    for task in todo.get_tasks_by_priority("high"):
-        print(f"  {task}")
+    current = "2026-04-10"
 
     print("Все задачи:")
     for task in todo.get_all_tasks():
         print(f"  {task}")
 
+    print("\nПросроченные задачи:")
+    for task in todo.get_overdue_tasks(current):
+        print(f"  {task}")
+
+    task = todo.tasks[3]  # задача с дедлайном "2026-04-05"
+    days = task.days_until_deadline(current)
+    if days is not None:
+        status_word = "дней" if days >= 0 else "просрочено на"
+        print(f"\nЗадача '{task.title}': {abs(days)} {status_word}")
 
 if __name__ == "__main__":
     main()
