@@ -5,16 +5,16 @@ import priority
 
 
 class Task:
-    def __init__(self, title, description="", deadline=None):
+    def __init__(self, title, description=""):
         self.title = title
         self.description = description
         self.completed = False
-        self.deadline = deadline  # строка с датой
+        self.tags = []  # список тегов
 
     def __str__(self):
         status = "✓" if self.completed else "✗"
-        deadline_str = f" (до {self.deadline})" if self.deadline else ""
-        return f"[{status}] {self.title}{deadline_str}"
+        tags_str = f" [{', '.join(self.tags)}]" if self.tags else ""
+        return f"[{status}] {self.title}{tags_str}"
 
     def days_until_deadline(self, current_date):
         if not self.deadline:
@@ -24,6 +24,14 @@ class Task:
         deadline_date = datetime.strptime(self.deadline, "%Y-%m-%d")
         current = datetime.strptime(current_date, "%Y-%m-%d")
         return (deadline_date - current).days
+
+    def add_tag(self, tag):
+        if tag not in self.tags:
+            self.tags.append(tag)
+
+    def remove_tag(self, tag):
+        if tag in self.tags:
+            self.tags.remove(tag)
 
 
 class TodoList:
