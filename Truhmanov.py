@@ -37,12 +37,22 @@ class TodoList:
     def get_completed_tasks(self):
         return [t for t in self.tasks if t.completed]
 
+    def get_tasks_sorted_by_priority(self):
+        priority_order = {"high": 1, "normal": 2, "low": 3}
+        return sorted(self.tasks, key=lambda t: priority_order.get(t.priority, 2))
+
 
 def main():
     todo = TodoList()
     todo.add_task("Изучить Git", "Разобраться с ветками и cherry-pick")
     todo.add_task("Сделать лабораторную", "Подготовить репозиторий")
     todo.add_task("Отдохнуть", "Посмотреть сериал")
+    todo.add_task("Срочная задача", "Сделать прямо сейчас", "high")
+    todo.add_task("Неважная задача", "Можно отложить", "low")
+
+    print("\nЗадачи по приоритету:")
+    for task in todo.get_tasks_sorted_by_priority():
+        print(f"  {task}")
 
     print("Все задачи:")
     for task in todo.get_all_tasks():
