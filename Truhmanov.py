@@ -2,7 +2,6 @@
 Simple Todo Manager
 """
 
-
 class Task:
     def __init__(self, title, description=""):
         self.title = title
@@ -45,7 +44,6 @@ def main():
     print("Все задачи:")
     for task in todo.get_all_tasks():
         print(f"  {task}")
-
 
 if __name__ == "__main__":
     main()
