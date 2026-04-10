@@ -41,6 +41,8 @@ class TodoList:
         priority_order = {"high": 1, "normal": 2, "low": 3}
         return sorted(self.tasks, key=lambda t: priority_order.get(t.priority, 2))
 
+    def get_tasks_by_priority(self, priority):
+        return [t for t in self.tasks if t.priority == priority]
 
 def main():
     todo = TodoList()
@@ -52,6 +54,10 @@ def main():
 
     print("\nЗадачи по приоритету:")
     for task in todo.get_tasks_sorted_by_priority():
+        print(f"  {task}")
+
+    print("\nСрочные задачи:")
+    for task in todo.get_tasks_by_priority("high"):
         print(f"  {task}")
 
     print("Все задачи:")
